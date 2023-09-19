@@ -2,10 +2,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 import scipy.stats as stats
 
-
-
-
-
 #Defino bloques funcionales
 def generar_FDP(limite_inferior, limite_superior, tamanio_muestra,media,desviacion_estandar):    
     muestras = np.linspace(limite_inferior, limite_superior, tamanio_muestra)
@@ -40,11 +36,13 @@ def buscar_menor_TPS_i(lista_tiempos):
 #TODO  
 def procesar_salida(tiempo_actual,vector_tiempo_proxima_salida_i,posicion_tiempo_proxima_salida_i):
     tiempo_actual = vector_tiempo_proxima_salida_i[posicion_tiempo_proxima_salida_i]
-    global NS, N, media_tiempo_atencion, desvio_tiempo_atencion
+    global NS, N, HV, media_tiempo_atencion, desvio_tiempo_atencion
     NS -=1
     if(NS>=N):
         tiempo_atencion = generar_tiempo_atencion(media_tiempo_atencion,desvio_tiempo_atencion)
         vector_tiempo_proxima_salida_i[posicion_tiempo_proxima_salida_i] = tiempo_actual + tiempo_atencion
+    else:
+        vector_tiempo_proxima_salida_i[posicion_tiempo_proxima_salida_i] = HV
     return tiempo_actual, vector_tiempo_proxima_salida_i
 #TODO  
 def procesar_llegada(tiempo_actual,tiempo_proxima_llegada):
@@ -79,7 +77,7 @@ N = 5
 NS = 0
 NT = 0
 tiempo_actual = 0
-tiempo_final = 100
+tiempo_final = 1000
 HV = tiempo_final*2
 iteracion = 0
 tiempo_proxima_llegada = 1
@@ -87,7 +85,7 @@ vector_tiempo_proxima_salida_i = [HV,HV,HV,HV,HV]
 tiempo_proxima_salida_i = 0
 posicion_tiempo_proxima_salida_i = 0
 media_arribo_pedidos, desvio_arribo_pedidos = 10,2
-media_tiempo_atencion, desvio_tiempo_atencion = 15,5
+media_tiempo_atencion, desvio_tiempo_atencion = 45,5
 
 
 while(CONDICION):
@@ -95,13 +93,13 @@ while(CONDICION):
     posicion_tiempo_proxima_salida_i, tiempo_proxima_salida_i = buscar_menor_TPS_i(vector_tiempo_proxima_salida_i)
     if(tiempo_proxima_llegada<=tiempo_proxima_salida_i):
         NT+=1
-        tiempo_actual, tiempo_proxima_llegada = procesar_llegada(tiempo_actual,tiempo_proxima_llegada)
+        tiempo_actual,tiempo_proxima_llegada = procesar_llegada(tiempo_actual,tiempo_proxima_llegada)
         if(NS<=N):
             vector_tiempo_proxima_salida_i = procesar_atencion_por_disponibilidad_de_puestos(tiempo_actual,tiempo_proxima_salida_i,vector_tiempo_proxima_salida_i)
     else:
-        tiempo_actual, vector_tiempo_proxima_salida_i = procesar_salida(tiempo_actual,tiempo_proxima_salida_i,posicion_tiempo_proxima_salida_i)
+        tiempo_actual, vector_tiempo_proxima_salida_i = procesar_salida(tiempo_actual,vector_tiempo_proxima_salida_i,posicion_tiempo_proxima_salida_i)
 
-    print(f"------> it:{iteracion},t:{format(tiempo_actual,'.2f')},TPLL: {format(tiempo_proxima_llegada, '.2f')}, i: {posicion_tiempo_proxima_salida_i}, TPS {format(tiempo_proxima_salida_i, '.2f')}, NT: {NT}")
+    print(f"------> it:{iteracion},t:{format(tiempo_actual,'.2f')},TPLL: {format(tiempo_proxima_llegada, '.2f')}, i+1: {posicion_tiempo_proxima_salida_i+1}, TPS {format(tiempo_proxima_salida_i, '.2f')}, NS: {NS} NT: {NT}")
     if(tiempo_actual>=tiempo_final):        
         if(NS==0):
             print("calculo Resultados")
