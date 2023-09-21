@@ -4,7 +4,7 @@ import scipy.stats as stats
 import pandas as pd
 from scipy.interpolate import interp1d
 
-archivo_excel = "Datos_FPD.xlsx" 
+archivo_excel = "C:\\Users\lauti\\Escritorio\\Python\Python\\TP_6_Simulaci-n_2023\\Datos_FPD_v1.xlsx" 
 df = pd.read_excel(archivo_excel)  
 
 
@@ -12,7 +12,7 @@ df = pd.read_excel(archivo_excel)
 num_bins = 20
 
 # Crear el histograma
-plt.hist(df['Horario_Arribo'], bins=num_bins, density=True, alpha=0.6, color='b', edgecolor='black')
+plt.hist(df['IA_minutos'], bins=num_bins, density=True, alpha=0.6, color='b', edgecolor='black')
 
 # Configurar etiquetas y título
 plt.xlabel('Horario_Arribo')
@@ -20,12 +20,12 @@ plt.ylabel('Densidad de Probabilidad')
 plt.title('Función de Densidad de Probabilidad')
 
 # Mostrar el histograma
-#plt.show()
+plt.show()
 
-plt.hist(df['Horario_Arribo'], bins=20, density=True, alpha=0.6, color='b', edgecolor='black', label='Datos')
+plt.hist(df['IA_minutos'], bins=20, density=True, alpha=0.6, color='b', edgecolor='black', label='Datos')
 
 # Calcular el histograma
-hist, bin_edges = np.histogram(df['Horario_Arribo'], bins=20, density=True)
+hist, bin_edges = np.histogram(df['IA_minutos'], bins=20, density=True)
 
 # Calcular la función de frecuencia acumulada
 cumulative_hist = np.cumsum(hist * np.diff(bin_edges))
@@ -68,5 +68,5 @@ for i in range(50):
 
 combinado = list(zip(random_generados,horarios_arribo_generados))
 print(f"Valores inversos para P{combinado}")
- 
+
     
