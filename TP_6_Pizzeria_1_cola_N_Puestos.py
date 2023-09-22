@@ -68,8 +68,8 @@ def procesar_salida(tiempo_actual,vector_tiempo_proxima_salida_i,posicion_tiempo
 
 def procesar_llegada(tiempo_actual,tiempo_proxima_llegada):
     tiempo_actual = tiempo_proxima_llegada
-    global histograma_CDF, bin_edges
-    intervalo_arribo = generar_intervalo_arribo(histograma_CDF,bin_edges)
+    global histograma_CDF_IA, bin_edges_IA
+    intervalo_arribo = generar_intervalo_arribo(histograma_CDF_IA,bin_edges_IA)
     tiempo_proxima_llegada += intervalo_arribo
     global NS
     NS+=1
@@ -89,22 +89,25 @@ def procesar_atencion_por_disponibilidad_de_puestos(tiempo_actual, posicion_tiem
     #Agregar STO 
     return vector_tiempo_proxima_salida_i
 
+
+
+
 #Defino Variables Globales
 ##mi MAIN() 
 CONDICION = True
-N = 5
-NS = 0
-NT = 0
+N = 5 #Puestos Atención
+NS = 0 #Elementos en el sistema en el tiempo actual
+NT = 0 #Elementos totales que ingresaron al sistema
 tiempo_actual = 0
 tiempo_final = 1000
 HV = tiempo_final*2
 iteracion = 0
 tiempo_proxima_llegada = 1
-vector_tiempo_proxima_salida_i = [HV,HV,HV,HV,HV]
+vector_tiempo_proxima_salida_i = [HV for _ in range(N)] #Inicializo puestos atención libres "HV"
 tiempo_proxima_salida_i = 0
 posicion_tiempo_proxima_salida_i = 0
 media_tiempo_atencion, desvio_tiempo_atencion = 15,5
-histograma_CDF, bin_edges = iniciar_FDP_and_CDF_IAs_obtener_CDF(num_bins,columna_excel_IA)
+histograma_CDF_IA, bin_edges_IA = iniciar_FDP_and_CDF_IAs_obtener_CDF(num_bins,columna_excel_IA)
 
 while(CONDICION):
     iteracion +=1
@@ -186,5 +189,5 @@ def graficar_histograma_FDP(columna_excel, num_bins):
     
 print("ACA GRAFICO")    
 graficar_histograma_FDP(columna_excel_IA,num_bins)
-graficar_histograma_CPF(bin_edges,histograma_CDF)
+graficar_histograma_CPF(bin_edges_IA,histograma_CDF_IA)
    
