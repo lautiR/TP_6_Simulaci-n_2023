@@ -5,6 +5,12 @@ import pandas as pd
 from scipy.interpolate import interp1d
 from scipy.stats import gaussian_kde
 
+#TODO ****************
+# 1) Convertir la FDP de T.A. (distribución normal) a una Equiprobable (entre 15 y 30 min, ponele) 
+# 2) Analizar la 2da Variable de Control, tomarla como "tiempo de corte" y poder particulzarizar para cada elemento
+# en el sistema, conocer su tiempo de permanecia (por ej, si tardó 30 min o más en salir del sistema ). Además, cálcular resultado
+# 3) Utilizar el Excel normalizado con los Datos Posta en vez del excel de prueba subido al repo. 
+#*********************
 
 #Importar Archivo Excel
 archivo_excel = "C:\\Users\lauti\\Escritorio\\Python\Python\\TP_6_Simulaci-n_2023\\Datos_FPD_v1.xlsx" 
@@ -106,14 +112,14 @@ def calcular_y_mostar_PPA():
 ##mi MAIN() 
 CONDICION = True
 #//**VARIABLES DE CONTROL//
-N_PUESTOS = 3 #Puestos Atención 
-N_CORTE_PROMO = 8 #Cantidad de elementos MAX en el sistema, a partir de los cuales, que me generarían un retraso
+N_PUESTOS = 4 #Puestos Atención 
+N_CORTE_PROMO = 5 #Cantidad de elementos MAX en el sistema, a partir de los cuales, que me generarían un retraso
 #//VARIABLES DE CONTROL**// 
 NS = 0 #Elementos en el sistema en el tiempo actual
 NT = 0 #Elementos totales que ingresaron al sistema
 ACTIVACIONES = 0
 tiempo_actual = 0
-tiempo_final = 100000
+tiempo_final = 10000
 HV = tiempo_final*2
 iteracion = 0
 tiempo_proxima_llegada = 0
