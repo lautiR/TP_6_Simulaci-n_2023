@@ -13,7 +13,7 @@ from scipy.stats import gaussian_kde
 #*********************
 
 #Importar Archivo Excel
-archivo_excel = "C:\\Users\lauti\\Escritorio\\Python\Python\\TP_6_Simulaci-n_2023\\Datos_FPD_v1.xlsx" 
+archivo_excel = ".\\Datos_FPD_v1.xlsx" 
 df = pd.read_excel(archivo_excel)  
 columna_excel_IA = 'IA_minutos'
 columna_excel_TA = 'TA_minutos'
@@ -49,7 +49,8 @@ def iniciar_FDP_and_CDF_IAs_obtener_CDF(num_bins,columna_excel):
 
 def generar_tiempo_atencion(media,desviacion_estandar):
     num_random = np.random.rand()
-    tiempo_atencion = generar_PPF_VIEJA(num_random,media,desviacion_estandar)    
+    # tiempo_atencion = generar_PPF_VIEJA(num_random,media,desviacion_estandar)    
+    tiempo_atencion = 15 + (15 * np.random.rand())
     return round(tiempo_atencion,2)
 
 def generar_intervalo_arribo(cumulative_hist,bin_edges):   
