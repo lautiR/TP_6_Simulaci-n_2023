@@ -14,12 +14,11 @@ from scipy.stats import gaussian_kde
 
 #Importar Archivo Excel
 #archivo_excel = ".\\Datos_FPD_v1.xlsx" 
-archivo_excel = ".\\pizza_orders.xlsx" 
+archivo_excel = "C:\\Users\\lauti\\Escritorio\\Python\\Python\\TP_6_Simulaci-n_2023\\pizza_orders.xlsx" 
 df = pd.read_excel(archivo_excel)  
 columna_excel_IA = 'IA'
-#columna_excel_TA = 'TA_minutos'
 # Configurar el número de bins (intervalos) para el histograma
-num_bins = 20
+num_bins = 90
 
 def generar_FDP(num_bins,columna_excel):  
     ## Calcular el histograma FDP
@@ -48,11 +47,9 @@ def iniciar_FDP_and_CDF_IAs_obtener_CDF(num_bins,columna_excel):
     cumulative_hist = generar_CDF(hist,bin_edges)
     return cumulative_hist, bin_edges
 
-def generar_tiempo_atencion(media,desviacion_estandar):
-    num_random = np.random.rand()
-    # tiempo_atencion = generar_PPF_VIEJA(num_random,media,desviacion_estandar)    
+def generar_tiempo_atencion():    
     tiempo_atencion = 15 + (15 * np.random.rand())
-    print(f"--> t:{format(tiempo_atencion,'.2f')}")
+    #print(f"--> TA:{format(tiempo_atencion,'.2f')}")
     return round(tiempo_atencion,2)
 
 def generar_intervalo_arribo(cumulative_hist,bin_edges):   
@@ -66,10 +63,10 @@ def buscar_menor_TPS_i(lista_tiempos):
  
 def procesar_salida(tiempo_actual,vector_tiempo_proxima_salida_i,posicion_tiempo_proxima_salida_i,vector_inicio_tiempo_ocioso_i):
     tiempo_actual = vector_tiempo_proxima_salida_i[posicion_tiempo_proxima_salida_i]
-    global NS, N_PUESTOS, HV, media_tiempo_atencion, desvio_tiempo_atencion
+    global NS, N_PUESTOS, HV
     NS -=1
     if(NS>=N_PUESTOS):
-        tiempo_atencion = generar_tiempo_atencion(media_tiempo_atencion,desvio_tiempo_atencion)
+        tiempo_atencion = generar_tiempo_atencion()
         vector_tiempo_proxima_salida_i[posicion_tiempo_proxima_salida_i] = tiempo_actual + tiempo_atencion
     else:
         vector_tiempo_proxima_salida_i[posicion_tiempo_proxima_salida_i] = HV
@@ -93,9 +90,8 @@ def buscar_puesto_atencion_libre(vector_tiempo_proxima_salida_i):
     return indice
 
 def procesar_atencion_por_disponibilidad_de_puestos(tiempo_actual, posicion_tiempo_proxima_salida_i,vector_tiempo_proxima_salida_i,vector_sumatoria_tiempo_ocioso_i,vector_inicio_tiempo_ocioso_i):
-    posicion_tiempo_proxima_salida_i = buscar_puesto_atencion_libre(vector_tiempo_proxima_salida_i)
-    global media_tiempo_atencion, desvio_tiempo_atencion
-    tiempo_atencion = generar_tiempo_atencion(media_tiempo_atencion, desvio_tiempo_atencion)
+    posicion_tiempo_proxima_salida_i = buscar_puesto_atencion_libre(vector_tiempo_proxima_salida_i)    
+    tiempo_atencion = generar_tiempo_atencion()
     vector_tiempo_proxima_salida_i[posicion_tiempo_proxima_salida_i] = tiempo_actual + tiempo_atencion
     vector_sumatoria_tiempo_ocioso_i[posicion_tiempo_proxima_salida_i] += (tiempo_actual - vector_inicio_tiempo_ocioso_i[posicion_tiempo_proxima_salida_i])
     #Agregar STO 
@@ -115,44 +111,44 @@ def calcular_y_mostar_PPA():
 ##mi MAIN() 
 CONDICION = True
 #//**VARIABLES DE CONTROL//
-N_PUESTOS = 4 #Puestos Atención 
+N_PUESTOS = 2 #Puestos Atención 
 N_CORTE_PROMO = 5 #Cantidad de elementos MAX en el sistema, a partir de los cuales, que me generarían un retraso
 #//VARIABLES DE CONTROL**// 
 NS = 0 #Elementos en el sistema en el tiempo actual
 NT = 0 #Elementos totales que ingresaron al sistema
 ACTIVACIONES = 0
 tiempo_actual = 0
-tiempo_final = 10000
-HV = tiempo_final*2
+tiempo_final = 1000
+HV = tiempo_final*100
 iteracion = 0
 tiempo_proxima_llegada = 0
 vector_tiempo_proxima_salida_i = [HV for _ in range(N_PUESTOS)] #Inicializo puestos atención libres "HV"
 vector_inicio_tiempo_ocioso_i = [0 for _ in range(N_PUESTOS)]
 vector_sumatoria_tiempo_ocioso_i = [0 for _ in range(N_PUESTOS)]
-media_tiempo_atencion, desvio_tiempo_atencion = 30,5
 histograma_CDF_IA, bin_edges_IA = iniciar_FDP_and_CDF_IAs_obtener_CDF(num_bins,columna_excel_IA)
 
-#while(CONDICION):
-#    iteracion +=1
-#    posicion_tiempo_proxima_salida_i, tiempo_proxima_salida_i = buscar_menor_TPS_i(vector_tiempo_proxima_salida_i)
-#    if(tiempo_proxima_llegada<=tiempo_proxima_salida_i):              
-#        tiempo_actual,tiempo_proxima_llegada = procesar_llegada(tiempo_actual,tiempo_proxima_llegada)
-#        if(NS>=N_CORTE_PROMO): #No es metodología, solo para Resultados
-#            ACTIVACIONES+=1
-#        if(NS<=N_PUESTOS):
-#            vector_tiempo_proxima_salida_i,vector_sumatoria_tiempo_ocioso_i = procesar_atencion_por_disponibilidad_de_puestos(tiempo_actual,tiempo_proxima_salida_i,vector_tiempo_proxima_salida_i,vector_sumatoria_tiempo_ocioso_i, vector_inicio_tiempo_ocioso_i)
-#    else:
-#        tiempo_actual, vector_tiempo_proxima_salida_i, vector_inicio_tiempo_ocioso_i = procesar_salida(tiempo_actual,vector_tiempo_proxima_salida_i,posicion_tiempo_proxima_salida_i,vector_inicio_tiempo_ocioso_i)
-#
-#    print(f"--> it:{iteracion},t:{format(tiempo_actual,'.2f')},TPLL: {format(tiempo_proxima_llegada, '.2f')}, i: {posicion_tiempo_proxima_salida_i}, TPS_i {format(tiempo_proxima_salida_i, '.2f')}, NS: {NS}, N_Ocupados: {sum(1 for e in vector_tiempo_proxima_salida_i if e != HV)} NT: {NT}, ITO_i: {format(vector_inicio_tiempo_ocioso_i[posicion_tiempo_proxima_salida_i],'.2f')}, STO_i: {format(vector_sumatoria_tiempo_ocioso_i[posicion_tiempo_proxima_salida_i],'.2f')}")
-#    if(tiempo_actual>=tiempo_final):        
-#        if(NS==0):
-#            print("calculo de Resultados:")
-#            calcular_y_mostrar_PTO_i(vector_sumatoria_tiempo_ocioso_i,tiempo_actual)
-#            calcular_y_mostar_PPA()  #Porcentaje_Promos_Activadas: Porcentaje de los pedidos que debieron activar la promo                   
-#            CONDICION = False
-#        else:
-#            tiempo_proxima_llegada = HV
+while(CONDICION):
+    iteracion +=1
+    posicion_tiempo_proxima_salida_i, tiempo_proxima_salida_i = buscar_menor_TPS_i(vector_tiempo_proxima_salida_i)
+    if(tiempo_proxima_llegada<=tiempo_proxima_salida_i):              
+        tiempo_actual,tiempo_proxima_llegada = procesar_llegada(tiempo_actual,tiempo_proxima_llegada)
+        if(NS>=N_CORTE_PROMO): #No es metodología, solo para Resultados
+            ACTIVACIONES+=1
+        if(NS<=N_PUESTOS):
+            vector_tiempo_proxima_salida_i,vector_sumatoria_tiempo_ocioso_i = procesar_atencion_por_disponibilidad_de_puestos(tiempo_actual,tiempo_proxima_salida_i,vector_tiempo_proxima_salida_i,vector_sumatoria_tiempo_ocioso_i, vector_inicio_tiempo_ocioso_i)
+    else:
+        tiempo_actual, vector_tiempo_proxima_salida_i, vector_inicio_tiempo_ocioso_i = procesar_salida(tiempo_actual,vector_tiempo_proxima_salida_i,posicion_tiempo_proxima_salida_i,vector_inicio_tiempo_ocioso_i)
+
+    print(f"--> it:{iteracion},t:{format(tiempo_actual,'.2f')},TPLL: {format(tiempo_proxima_llegada, '.2f')}, i: {posicion_tiempo_proxima_salida_i}, TPS_i: {format(tiempo_proxima_salida_i, '.2f')}, NS: {NS}, N_Ocupados: {sum(1 for e in vector_tiempo_proxima_salida_i if e != HV)} NT: {NT}, ITO_i: {format(vector_inicio_tiempo_ocioso_i[posicion_tiempo_proxima_salida_i],'.2f')}, STO_i: {format(vector_sumatoria_tiempo_ocioso_i[posicion_tiempo_proxima_salida_i],'.2f')}")
+    if(tiempo_actual>=tiempo_final):        
+        if(NS==0):
+            print("Cálculo de Resultados:")
+            calcular_y_mostrar_PTO_i(vector_sumatoria_tiempo_ocioso_i,tiempo_actual)
+            calcular_y_mostar_PPA()  #Porcentaje_Promos_Activadas: Porcentaje de los pedidos que debieron activar la promo                   
+            CONDICION = False
+        else:
+            tiempo_proxima_llegada = HV
+            
     
 
 ## GRAFICOS FDP y CPF         
@@ -160,8 +156,8 @@ def graficar_histograma_CPF(bin_edges,cumulative_hist):
     plt.figure()
     plt.plot(bin_edges[:-1], cumulative_hist, 'r-', label='Frecuencia Acumulada')
     plt.xlabel('Intervalo Arribo [Minuntos]')
-    plt.ylabel('Frecuencia Acumulada')
-    plt.title('Función de Frecuencia Acumulada')
+    plt.ylabel('Probabilidad Acumulada')
+    plt.title('Función de Distribución Acumulada')
     plt.legend()
     plt.show()
     
