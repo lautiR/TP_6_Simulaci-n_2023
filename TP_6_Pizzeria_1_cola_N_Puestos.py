@@ -29,10 +29,6 @@ def generar_CDF(hist,bin_edges):
     cumulative_hist = np.cumsum(hist * np.diff(bin_edges))    
     return cumulative_hist
 
-def generar_PPF_VIEJA(numero_random,media,desviacion_estandar):
-    x_inversa = stats.norm.ppf(numero_random, loc=media, scale=desviacion_estandar)
-    return x_inversa
-
 def generar_PPF(cumulative_hist,bin_edges):
     # # Crear una función interpoladora inversa relacionada con la ACUMULADA
     inverse_cumulative = interp1d(cumulative_hist, bin_edges[:-1], bounds_error=False, fill_value=(bin_edges[0], bin_edges[-1]))
@@ -48,7 +44,7 @@ def iniciar_FDP_and_CDF_IAs_obtener_CDF(num_bins,columna_excel):
     return cumulative_hist, bin_edges
 
 def generar_tiempo_atencion():    
-    tiempo_atencion = 15 + (15 * np.random.rand())
+    tiempo_atencion = 5 + (10* np.random.rand())
     #print(f"--> TA:{format(tiempo_atencion,'.2f')}")
     return round(tiempo_atencion,2)
 
@@ -111,8 +107,8 @@ def calcular_y_mostar_PPA():
 ##mi MAIN() 
 CONDICION = True
 #//**VARIABLES DE CONTROL//
-N_PUESTOS = 2 #Puestos Atención 
-N_CORTE_PROMO = 5 #Cantidad de elementos MAX en el sistema, a partir de los cuales, que me generarían un retraso
+N_PUESTOS = 5 #Puestos Atención 
+N_CORTE_PROMO = 20 #Cantidad de elementos MAX en el sistema, a partir de los cuales, que me generarían un retraso
 #//VARIABLES DE CONTROL**// 
 NS = 0 #Elementos en el sistema en el tiempo actual
 NT = 0 #Elementos totales que ingresaron al sistema
@@ -126,6 +122,7 @@ vector_tiempo_proxima_salida_i = [HV for _ in range(N_PUESTOS)] #Inicializo pues
 vector_inicio_tiempo_ocioso_i = [0 for _ in range(N_PUESTOS)]
 vector_sumatoria_tiempo_ocioso_i = [0 for _ in range(N_PUESTOS)]
 histograma_CDF_IA, bin_edges_IA = iniciar_FDP_and_CDF_IAs_obtener_CDF(num_bins,columna_excel_IA)
+tiempo_permanencia_elemento = 0
 
 while(CONDICION):
     iteracion +=1
