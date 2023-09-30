@@ -156,7 +156,7 @@ while(CONDICION):
 def graficar_histograma_CPF(bin_edges,cumulative_hist):    
     plt.figure()
     plt.plot(bin_edges[:-1], cumulative_hist, 'r-', label='Frecuencia Acumulada')
-    plt.xlabel('Intervalo Arribo [Minuntos]')
+    plt.xlabel('Intervalo Arribo [Minuntos]') 
     plt.ylabel('Frecuencia Acumulada')
     plt.title('Función de Frecuencia Acumulada')
     plt.legend()
@@ -188,7 +188,7 @@ def graficar_histograma_FDP(columna_excel, num_bins):
     # Mostrar el gráfico
     plt.show()
     
-# print("ACÁ GRAFÍCO")    
-# graficar_histograma_FDP(columna_excel_IA,num_bins)
-# graficar_histograma_CPF(bin_edges_IA,histograma_CDF_IA)
+print("ACÁ GRAFÍCO")    
+graficar_histograma_FDP(columna_excel_IA,num_bins)
+graficar_histograma_CPF(bin_edges_IA,histograma_CDF_IA)
    
