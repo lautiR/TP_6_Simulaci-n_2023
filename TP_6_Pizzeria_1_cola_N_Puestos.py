@@ -44,7 +44,7 @@ def iniciar_FDP_and_CDF_IAs_obtener_CDF(num_bins,columna_excel):
     return cumulative_hist, bin_edges
 
 def generar_tiempo_atencion():    
-    tiempo_atencion = 5 + (10* np.random.rand())
+    tiempo_atencion = 10 + (5* np.random.rand())
     #print(f"--> TA:{format(tiempo_atencion,'.2f')}")
     return round(tiempo_atencion,2)
 
