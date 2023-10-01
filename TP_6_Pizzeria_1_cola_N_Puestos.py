@@ -44,7 +44,7 @@ def iniciar_FDP_and_CDF_IAs_obtener_CDF(num_bins,columna_excel):
     return cumulative_hist, bin_edges
 
 def generar_tiempo_atencion():    
-    tiempo_atencion = 5 + (10* np.random.rand())
+    tiempo_atencion = 10 + (5* np.random.rand())
     #print(f"--> TA:{format(tiempo_atencion,'.2f')}")
     return round(tiempo_atencion,2)
 
@@ -107,14 +107,14 @@ def calcular_y_mostar_PPA():
 ##mi MAIN() 
 CONDICION = True
 #//**VARIABLES DE CONTROL//
-N_PUESTOS = 5 #Puestos Atención 
-N_CORTE_PROMO = 20 #Cantidad de elementos MAX en el sistema, a partir de los cuales, que me generarían un retraso
+N_PUESTOS = 4 #Puestos Atención 
+N_CORTE_PROMO = 50 #Cantidad de elementos MAX en el sistema, a partir de los cuales, que me generarían un retraso
 #//VARIABLES DE CONTROL**// 
 NS = 0 #Elementos en el sistema en el tiempo actual
 NT = 0 #Elementos totales que ingresaron al sistema
 ACTIVACIONES = 0
 tiempo_actual = 0
-tiempo_final = 1000
+tiempo_final = 100000
 HV = tiempo_final*100
 iteracion = 0
 tiempo_proxima_llegada = 0
