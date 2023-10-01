@@ -14,7 +14,7 @@ from scipy.stats import gaussian_kde
 
 #Importar Archivo Excel
 #archivo_excel = ".\\Datos_FPD_v1.xlsx" 
-archivo_excel = "C:\\Users\\lauti\\Escritorio\\Python\\Python\\TP_6_Simulaci-n_2023\\pizza_orders.xlsx" 
+archivo_excel = ".\\pizza_orders.xlsx" 
 df = pd.read_excel(archivo_excel)  
 columna_excel_IA = 'IA'
 # Configurar el número de bins (intervalos) para el histograma
@@ -107,14 +107,14 @@ def calcular_y_mostar_PPA():
 ##mi MAIN() 
 CONDICION = True
 #//**VARIABLES DE CONTROL//
-N_PUESTOS = 5 #Puestos Atención 
-N_CORTE_PROMO = 20 #Cantidad de elementos MAX en el sistema, a partir de los cuales, que me generarían un retraso
+N_PUESTOS = 3 #Puestos Atención 
+N_CORTE_PROMO = 12 #Cantidad de elementos MAX en el sistema, a partir de los cuales, que me generarían un retraso
 #//VARIABLES DE CONTROL**// 
 NS = 0 #Elementos en el sistema en el tiempo actual
 NT = 0 #Elementos totales que ingresaron al sistema
 ACTIVACIONES = 0
 tiempo_actual = 0
-tiempo_final = 1000
+tiempo_final = 100000
 HV = tiempo_final*100
 iteracion = 0
 tiempo_proxima_llegada = 0
@@ -152,7 +152,7 @@ while(CONDICION):
 def graficar_histograma_CPF(bin_edges,cumulative_hist):    
     plt.figure()
     plt.plot(bin_edges[:-1], cumulative_hist, 'r-', label='Frecuencia Acumulada')
-    plt.xlabel('Intervalo Arribo [Minuntos]')
+    plt.xlabel('Intervalo Arribo [Minutos]')
     plt.ylabel('Probabilidad Acumulada')
     plt.title('Función de Distribución Acumulada')
     plt.legend()

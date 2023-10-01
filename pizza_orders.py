@@ -14,7 +14,7 @@ start_hour = 19  # 7 PM
 end_hour = 24   # Midnight
 
 # Define the maximum number of orders per day
-max_orders_per_day = 200
+max_orders_per_day = 80
 
 # Create a list to store orders
 orders = []
